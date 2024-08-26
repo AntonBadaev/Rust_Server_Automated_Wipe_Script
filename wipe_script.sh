@@ -1,56 +1,86 @@
 #!/bin/bash
 
-# Version 1.0 by Deviant.
+# Version 2.0 by Deviant.
 # Script for automated wipe on a Rust server, with a Telegram announcement.
 
 #=======================Explanation==========================
 
 # Logs are saved in /PATH_TO_DIRECTORY/wipe_script.log
-# Then script start doing this:
-# 1. Stop the Rust server service
-# 2. Start an update for the server
-# 3. Download a new version of Oxide
-# 4. Unzip Oxide to the server directory RustDedicated_Data/Managed/*. !!!The archive needs to be in the same directory as your Rust server, i.e., ~/server directory!!!
-# 5. Add permissions to RustDedicated_Data/Managed/* for the server admin user
-# 6. Every first week, remove map files
-# 7. !to do! Every second week, remove map and player files (blueprints)
-# 8. Remove Oxide files after downloading.
-# 9. Run the server. If successful, notify via the Telegram bot.
-# 10. Sleep for 600 seconds while server starting
-# 11. Send status of rust service via Telegram bot.
+# The script proceeds as follows:
+# 1. Stops the Rust server service
+# 2. Starts an update for the server
+# 3. Downloads a new version of Oxide
+# 4. Unzips Oxide into the server's RustDedicated_Data/Managed directory. Note that the archive must be placed in the same directory as your Rust server, i.e., ~/server.
+# 5. Adds necessary permissions for the server admin user on RustDedicated_Data/Managed/*
+# 6. Removes map files every first week
+# 7. Removes both map and player files (blueprints) every second week
+# 8. Deletes Oxide files after they've been downloaded
+# 9. Starts the server, sending a notification through the Telegram bot upon successful launch.
+# 10. Pauses for 600 seconds to allow for server startup
+# 11. Sends the status of the Rust server service via the Telegram bot.
 
-LOGFILE="/PATH_TO_DIRECTORY/wipe_script.log"
+# Log path
+LOGFILE="/path/to/wipe_script.log"
 > $LOGFILE
 
-commands=("sudo systemctl stop RUST_SERVER.service"
-"sudo /usr/games/steamcmd +@sSteamCmdForcePlatformType linux +force_install_dir /PATH_TO_SERVERFILES +login anonymous +app_update 258550 validate +quit"
-"sudo wget -P /PATH_TO_DOWNLOAD_DIRECTORY https://umod.org/games/rust/download/develop"
-"sudo 7z x -y /PATH_TO_OXIDE_ARCHIVE"
-"sudo chown -R USER:USER /PATH_TO_SERVER_FILES/server/RustDedicated_Data/Managed/*"
-"sudo rm /PATH_TO_SERVER_FILES/server/SERVER_IDENTITY/proceduralmap*"
-"sudo rm /PATH_TO_OXIDE_ARCHIVE"
-"sudo systemctl start your_rust_server_service"
-"curl -s -X POST https://api.telegram.org/bot"Bot API key here without quotes"/sendMessage -d chat_id="your chat id" -d text='Wipe successful!'"
+# Store information like Telegram API key and chat id
+api_key=""
+chat_id=""
+
+# Retrieve the current week
+current_week=$(date +%V)
+
+# Define paths to the files storing the last wipe dates
+last_map_only_wipe_file="/path/to/last_map_only_wipe.txt"
+last_map_and_players_wipe_file="/path/to/last_map_and_players_wipe.txt"
+
+# Read the last wipe dates from file
+last_map_only_wipe=$(cat $last_map_only_wipe_file 2>/dev/null || echo "0")
+last_map_and_players_wipe=$(cat $last_map_and_players_wipe_file 2>/dev/null || echo "0")
+
+# List of commands to be executed
+commands=("sudo systemctl stop rustserver.service"
+          "sudo /usr/games/steamcmd +@sSteamCmdForcePlatformType linux +force_install_dir /path/to/server +login anonymous +app_update 258550 validate +quit"
+          "sudo wget -P /path/to/file https://umod.org/games/rust/download/develop"
+          "sudo 7z x -y /path/to/file/develop"
+          "sudo chown -R user:user /path/to/server/RustDedicated_Data/Managed/*"
+          "sudo rm /path/to/file/develop"
+          "sudo rm /path/to/server/SERVER_IDENTITY/proceduralmap*"
+          "sudo systemctl start rustserver.service"
+          "curl -s -X POST https://api.telegram.org/bot$api_key/sendMessage -d chat_id=$chat_id -d text='Wipe successful!'"
 )
 
+# Cycle to alternate full wipes every two weeks
 for command in "${commands[@]}"; do
+  if [[ $command =~ ^sudo\ rm\ /home/rustserver/server/my_server_identity/proceduralmap* ]]; then
+    if [[ $((current_week - last_map_and_players_wipe)) -gt $((current_week - last_map_only_wipe)) ]]; then
+      echo "Removing both map and player files..." >> $LOGFILE
+      command="sudo rm /home/rustserver/server/my_server_identity/proceduralmap*; sudo rm /home/rustserver/server/my_server_identity/player*"
+      echo $current_week > $last_map_and_players_wipe_file
+    else
+      echo "Removing only map files..." >> $LOGFILE
+      echo $current_week > $last_map_only_wipe_file
+    fi
+  fi
+
   echo "Running: $command" >> $LOGFILE
   eval "$command" >> $LOGFILE 2>&1
 
-  # Check the exit status of the last command
+  # Check status of the last command
   if [ $? -eq 0 ]; then
     echo "Success" >> $LOGFILE
   else
     echo "Error" >> $LOGFILE
-    curl -s -X POST https://api.telegram.org/bot"Bot API key here without quotes"/sendMessage -d chat_id="your chat id" -d text="The script encountered errors while running"
+    curl -s -X POST https://api.telegram.org/bot$api_key/sendMessage -d chat_id=$chat_id -d text="The script encountered errors while running"
     exit 1
   fi
 done
 
 echo "Script exited successfully" >> $LOGFILE
 
+# Pause for 10 minutes to allow for full server startup.
 sleep 600
+rustserverstatus=$(systemctl status rustserver.service)
 
-rustserverstatus=$(systemctl status RUST_SERVER.service)
-
-curl -s -X POST https://api.telegram.org/bot"Bot API key here without quotes"/sendMessage -d chat_id="your chat id" -d text="$rustserverstatus"
+# Send the service status via Telegram
+curl -s -X POST https://api.telegram.org/bot$api_key/sendMessage -d chat_id=$chat_id -d text="$rustserverstatus"
