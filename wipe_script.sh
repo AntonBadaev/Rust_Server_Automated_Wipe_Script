@@ -26,6 +26,7 @@ LOGFILE="/path/to/wipe_script.log"
 # Store information like Telegram API key and chat id
 api_key=""
 chat_id=""
+server_path=/path/to/server
 
 # Define paths to the files storing the last wipe dates
 last_map_only_wipe_file="/path/to/last_map_only_wipe.txt"
@@ -40,22 +41,22 @@ last_map_and_players_wipe=$(cat $last_map_and_players_wipe_file 2>/dev/null || e
 
 # List of commands to be executed
 commands=("sudo systemctl stop rustserver.service"
-          "sudo /usr/games/steamcmd +@sSteamCmdForcePlatformType linux +force_install_dir /path/to/server +login anonymous +app_update 258550 validate +quit"
-          "sudo wget -P /path/to/file https://umod.org/games/rust/download/develop"
-          "sudo 7z x -y /path/to/file/develop"
-          "sudo chown -R user:user /path/to/server/RustDedicated_Data/Managed/*"
-          "sudo rm /path/to/file/develop"
-          "sudo rm /path/to/server/SERVER_IDENTITY/proceduralmap*"
+          "sudo /usr/games/steamcmd +@sSteamCmdForcePlatformType linux +force_install_dir $server_path +login anonymous +app_update 258550 validate +quit"
+          "sudo wget -P $server_path https://umod.org/games/rust/download/develop"
+          "sudo 7z x -y $server_path/develop"
+          "sudo chown -R user:user $server_path/RustDedicated_Data/Managed/*"
+          "sudo rm $server_path/develop"
+          "sudo rm $server_path/SERVER_IDENTITY/proceduralmap*"
           "sudo systemctl start rustserver.service"
           "curl -s -X POST https://api.telegram.org/bot$api_key/sendMessage -d chat_id=$chat_id -d text='Wipe successful!'"
 )
 
 # Cycle to alternate full wipes every two weeks
 for command in "${commands[@]}"; do
-  if [[ $command =~ ^sudo\ rm\ /path/to/server/my_server_identity/proceduralmap* ]]; then
+  if [[ $command =~ ^sudo\ rm\ $server_path/my_server_identity/proceduralmap* ]]; then
     if [[ $((current_week - last_map_and_players_wipe)) -gt $((current_week - last_map_only_wipe)) ]]; then
       echo "Removing both map and player files..." >> $LOGFILE
-      command="sudo rm /path/to/server/my_server_identity/proceduralmap*; sudo rm /path/to/server/my_server_identity/player*"
+      command="sudo rm $server_path/my_server_identity/proceduralmap*; sudo rm $server_path/my_server_identity/player*"
       echo $current_week > $last_map_and_players_wipe_file
     else
       echo "Removing only map files..." >> $LOGFILE
