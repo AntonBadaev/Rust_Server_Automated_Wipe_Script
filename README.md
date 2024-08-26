@@ -25,6 +25,7 @@ Place the wipe_script.sh file in your server folder.
 You can manually run it by executing ./wipe_script.sh.
 
 An example of a message when the script completes its task:
+
 ![image](https://github.com/user-attachments/assets/9bd8ccff-6756-45cc-81e4-7429c9309ce0)
 
 If you wish to automate the script's execution, simply add it to crontab:
