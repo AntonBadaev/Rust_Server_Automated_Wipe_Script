@@ -1,4 +1,4 @@
-This script has been tested exclusively on Ubuntu 22.04 selfhosted server, and is designed for modded servers requiring weekly wipes.
+This script has been tested only on Ubuntu 22.04 selfhosted server, and is designed for modded Rust servers requiring weekly wipes.
 
 Here's how the script operates on Linux systems:
 
