@@ -1,4 +1,4 @@
-This script tested only on Ubuntu 22.04.
+This script tested only on Ubuntu 22.04. Created for modded servers with wipe time every week. 
 
 The script proceeds as follows for Linux systems:
 
@@ -14,12 +14,19 @@ The script proceeds as follows for Linux systems:
 10. Pauses for 600 seconds to allow for server startup
 11. Sends the status of the Rust server service via the Telegram bot.
 
+Important! Before run this script you need to make sure you have personal Telegram bot and configurated Rust server with service to manage startup.
+
 To running this script, make sure you have rustserver.service for starting Rust server, and place this file into /etc/systemd/system/ directory.  Example of service stored in file rustserver.service in this repo and you need to configurate this for your server. 
-And u need to have Telegram bot if u want to send notifications. 
+
+If script succesful or failed Telegram bot will send you massages. Or u can modify script and just monitor it with any Monitoring system like Zabbix or Grafana.
+
+Example of message:
 ![image](https://github.com/user-attachments/assets/7f51221a-6c77-4f6c-9d52-2a06463e640a)
 
-If u want to start it manualy just add this to crontab:
+If u want to start it automaticly just add this to crontab:
 
-0 10 * * 6 /usr/bin/sudo /home/rustserver/server/wipe_script.sh (every 6 day of week in 10AM wipe server)
+example: 0 10 * * 6 /usr/bin/sudo /home/rustserver/server/wipe_script.sh 
+
+Launch script every 6 day of week at 10AM 
 
 You can change this script, and use it for any purpose. 
