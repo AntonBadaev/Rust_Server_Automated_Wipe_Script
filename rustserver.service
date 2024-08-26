@@ -5,26 +5,26 @@ After=network-online.target
 
 [Service]
 Environment=SteamAppId=258550
-Environment=LD_LIBRARY_PATH=/home/rustserver/server:$LD_LIBRARY_PATH
+Environment=LD_LIBRARY_PATH=/path/to/server:$LD_LIBRARY_PATH
 Type=simple
 Restart=on-failure
 RestartSec=10
 KillSignal=SIGINT
-User=rustserver
-Group=rustserver
-WorkingDirectory=/home/rustserver/server
-ExecStartPre=/usr/games/steamcmd +@sSteamCmdForcePlatformType linux +force_install_dir /home/rustserver/server +login anonymous +app_update 258550 +quit
-ExecStart=/home/rustserver/server/RustDedicated -batchmode \
+User=server_admin
+Group=server_admin
+WorkingDirectory=/path/to/server
+ExecStartPre=/usr/games/steamcmd +@sSteamCmdForcePlatformType linux +force_install_dir /path/to/server +login anonymous +app_update 258550 +quit
+ExecStart=/path/to/server/RustDedicated -batchmode \
     +server.port 28015 \
     +server.queryport 28017 \
     +server.level "Procedural Map" \
     +server.seed 12345 \
     +server.worldsize 3000 \
     +server.maxplayers 300 \
-    +server.hostname "BIGRUST|X50|ДЛЯ НОВИЧКОВ|BATTLEGROUND" \
-    +server.description "Комфортный сервер для игры в Раст для новичков. Кастомные рейты на добычу и компоненты. Короткая ночь 5 минут. Стартовые киты. Телепортация домой и многое другое! Заходи, развивайся, побеждай" \
+    +server.hostname "SERVER_NAME" \
+    +server.description "type some discription" \
     +rcon.port 28016 \
-    +rcon.password "jc_19LCx-R" \
+    +rcon.password "rcon_pass" \
     +rcon.web 1
     +ai.move "False"
 [Install]
