@@ -1,53 +1,56 @@
 #!/bin/bash
 
-#Версия 1.0 by Deviant.
-#Скрипт для автоматическорго вайпа сервера, с оповещением в телеграмм.
+# Version 1.0 by Deviant.
+# Script for automated wipe on a Rust server, with a Telegram announcement.
 
-#=======================что делает скрипт==========================
+#=======================Explanation==========================
 
-#Пишет логи в /home/rustserver/wipe_script.log
+# Logs are saved in /PATH_TO_DIRECTORY/wipe_script.log
+# Then script start doing this:
+# 1. Stop the Rust server service
+# 2. Start an update for the server
+# 3. Download a new version of Oxide
+# 4. Unzip Oxide to the server directory RustDedicated_Data/Managed/*. The archive needs to be in the same directory as your Rust server, i.e., ~/server directory
+# 5. Add permissions to RustDedicated_Data/Managed/* for the server admin user
+# 6. Every first week, remove map files
+# 7. Every second week, remove map and player files (blueprints)
+# 8. Remove Oxide files after downloading.
+# 9. Run the server. If successful, notify via the Telegram bot.
+# 10. Sleep for 600 seconds while server starting
+# 11. Send status of rust service via Telegram bot.
 
-#1. остановка сервиса
-#2. запуск обновления сервера
-#3. скачивание новой версии oxide
-#4. распаковка oxide сразу в директорию RustDedicated_Data/Managed/
-#5. задает права для папки и подпапок RustDedicated_Data/Managed/* пользователю rustserver
-#6. удаляет файлы карт
-#7. (раз в 2 недели) Для полного вайпа удаляет и карту и блюпринты.
-#8. удаляет скачанные файлы oxide
-#9. запускает сервер и проверяет что моды работают.
-
-LOGFILE="/home/rustserver/wipe_script.log"
+LOGFILE="/PATH_TO_DIRECTORY/wipe_script.log"
 > $LOGFILE
 
-commands=("sudo systemctl stop rustserver.service"
-"sudo /usr/games/steamcmd +@sSteamCmdForcePlatformType linux +force_install_dir /home/rustserver/server +login anonymous +app_update 258550 validate +quit"
-"sudo wget -P /home/rustserver/ https://umod.org/games/rust/download/develop"
-"sudo 7z x -y /home/rustserver/develop"
-"sudo chown -R rustserver:rustserver /home/rustserver/server/RustDedicated_Data/Managed/*"
-"sudo rm /home/rustserver/server/server/my_server_identity/proceduralmap*"
-"sudo rm /home/rustserver/develop"
-"sudo systemctl start rustserver.service"
-"curl -s -X POST https://api.telegram.org/bot7497623677:AAGLfhilJtpJbwOlD41iEGSDS-7R4JWnBO8/sendMessage -d chat_id=1075510365 -d text='Вайп прошел успешно!'"
+commands=("sudo systemctl stop RUST_SERVER.service"
+"sudo /usr/games/steamcmd +@sSteamCmdForcePlatformType linux +force_install_dir /PATH_TO_SERVERFILES +login anonymous +app_update 258550 validate +quit"
+"sudo wget -P /PATH_TO_DOWNLOAD_DIRECTORY https://umod.org/games/rust/download/develop"
+"sudo 7z x -y /PATH_TO_OXIDE_ARCHIVE"
+"sudo chown -R USER:USER /PATH_TO_SERVER_FILES/server/RustDedicated_Data/Managed/*"
+"sudo rm /PATH_TO_SERVER_FILES/server/SERVER_IDENTITY/proceduralmap*"
+"sudo rm /PATH_TO_OXIDE_ARCHIVE"
+"sudo systemctl start your_rust_server_service"
+"curl -s -X POST https://api.telegram.org/bot"Bot API key here without quotes"/sendMessage -d chat_id="your chat id" -d text='Wipe successful!'"
 )
 
 for command in "${commands[@]}"; do
-  echo "Выполняется: $command" >> $LOGFILE
-  eval $command >> $LOGFILE 2>&1
+  echo "Running: $command" >> $LOGFILE
+  eval "$command" >> $LOGFILE 2>&1
 
-  # Проверяем статус выхода последней команды
+  # Check the exit status of the last command
   if [ $? -eq 0 ]; then
-    echo "Успешно" >> $LOGFILE
+    echo "Success" >> $LOGFILE
   else
-    echo "Ошибка " >> $LOGFILE
-    curl -s -X POST https://api.telegram.org/bot7497623677:AAGLfhilJtpJbwOlD41iEGSDS-7R4JWnBO8/sendMessage -d chat_id=1075510365 -d text="Вайп пошел по пизде!"
+    echo "Error" >> $LOGFILE
+    curl -s -X POST https://api.telegram.org/bot"Bot API key here without quotes"/sendMessage -d chat_id="your chat id" -d text="The script encountered errors while running"
     exit 1
   fi
 done
 
-echo "Скрипт выполнен успешно" >> $LOGFILE
+echo "Script exited successfully" >> $LOGFILE
 
 sleep 600
-rustserverstatus=$(systemctl status rustserver)
-curl -s -X POST https://api.telegram.org/bot7497623677:AAGLfhilJtpJbwOlD41iEGSDS-7R4JWnBO8/sendMessage -d chat_id=1075510365 -d text="echo '$rustserverstatus'"
 
+rustserverstatus=$(systemctl status RUST_SERVER.service)
+
+curl -s -X POST https://api.telegram.org/bot"Bot API key here without quotes"/sendMessage -d chat_id="your chat id" -d text="$rustserverstatus"
