@@ -32,4 +32,6 @@ If you wish to automate the script's execution, simply add it to crontab:
 
 For instance: 0 10 * * 6 /usr/bin/sudo /home/rustserver/server/wipe_script.sh, which launches the script every Saturday at 10AM.
 
+Cosider that you need to save last_map_only_wipe.txt and last_map_and_players_wipe.txt files if u don't want to miss full wipe or map wipe.
+
 Feel free to modify this script and adapt it to suit your requirements.
