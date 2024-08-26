@@ -12,4 +12,4 @@ The script proceeds as follows:
 10. Pauses for 600 seconds to allow for server startup
 11. Sends the status of the Rust server service via the Telegram bot.
 
-For running this script, make sure you have .service for starting Rust server. Example of service sotred in file rustserver.service
+For running this script, make sure you have .service for starting Rust server. Example of service sotred in file /etc/systemd/system/rustserver.service
