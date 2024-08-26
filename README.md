@@ -20,7 +20,7 @@ To run this script, ensure you have a rustserver.service file for starting the R
 
 Upon successful execution or failure, the Telegram bot will send you messages. Alternatively, you may modify the script to monitor it with any monitoring system such as Zabbix or Grafana.
 
-Place the wipe_script.sh file in your server folder.
+Place the wipe_script.sh file in your server folder. add execute permission to file with chmod +x /path/to/wipe_script.sh
 
 You can manually run it by executing ./wipe_script.sh.
 
