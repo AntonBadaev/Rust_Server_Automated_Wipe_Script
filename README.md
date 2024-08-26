@@ -1,30 +1,34 @@
-This script tested only on Ubuntu 22.04. Created for modded servers with wipe time every week. 
+This script has been tested exclusively on Ubuntu 22.04 and is designed for modded servers requiring weekly wipes.
 
-The script proceeds as follows for Linux systems:
+Here's how the script operates on Linux systems:
 
-1. Stops the Rust server service
-2. Starts an update for the server
-3. Downloads a new version of Oxide
-4. Unzips Oxide into the server's RustDedicated_Data/Managed directory. Note that the archive must be placed in the same directory as your Rust server, i.e., ~/server.
-5. Adds necessary permissions for the server admin user on RustDedicated_Data/Managed/*
-6. Removes map files every first week
-7. Removes both map and player files (blueprints) every second week
-8. Deletes Oxide files after they've been downloaded
-9. Starts the server, sending a notification through the Telegram bot upon successful launch.
-10. Pauses for 600 seconds to allow for server startup
-11. Sends the status of the Rust server service via the Telegram bot.
+1. It stops the Rust server service.
+2. It initiates an update for the server.
+3. It downloads a new version of Oxide.
+4. It extracts Oxide into the server's RustDedicated_Data/Managed directory. Note, the archive should be located in the same directory as your Rust server, typically at ~/server.
+5. It adds necessary permissions for the server admin user on RustDedicated_Data/Managed/*.
+6. It removes map files during the first week.
+7. It removes both map and player files (blueprints) during the second week.
+8. It deletes Oxide files after they've been downloaded.
+9. It starts the server, sending a notification through the Telegram bot upon successful launch.
+10. It pauses for 600 seconds to allow for server startup.
+11. It sends the status of the Rust server service via the Telegram bot.
 
-Important! Before run this script you need to make sure you have personal Telegram bot and configurated Rust server with service to manage startup.
+Important! Prior to running this script, ensure you have set up a personal Telegram bot and configured your Rust server with a service for management.
 
-To running this script, make sure you have rustserver.service for starting Rust server, and place this file into /etc/systemd/system/ directory.  Example of service stored in file rustserver.service in this repo and you need to configurate this for your server. 
+To run this script, ensure you have a rustserver.service file for starting the Rust server, and place this script in the /etc/systemd/system/ directory. An example of such a service is stored in the rustserver.service file in this repository, which you need to configure for your specific server.
 
-If script succesful or failed Telegram bot will send you massages. Or u can modify script and just monitor it with any Monitoring system like Zabbix or Grafana.
+Upon successful execution or failure, the Telegram bot will send you messages. Alternatively, you may modify the script to monitor it with any monitoring system such as Zabbix or Grafana.
 
-Example of message:
-![image](https://github.com/user-attachments/assets/7f51221a-6c77-4f6c-9d52-2a06463e640a)
+Place the wipe_script.sh file in your server folder.
 
-If u want to start it automaticly just add this to crontab:
+You can manually run it by executing ./wipe_script.sh.
 
-example: 0 10 * * 6 /usr/bin/sudo /home/rustserver/server/wipe_script.sh this launch script every 6 day of week at 10AM 
+An example of a message when the script completes its task:
+![image](https://github.com/user-attachments/assets/9bd8ccff-6756-45cc-81e4-7429c9309ce0)
 
-You can change this script, and use it for any purpose. 
+If you wish to automate the script's execution, simply add it to crontab:
+
+For instance: 0 10 * * 6 /usr/bin/sudo /home/rustserver/server/wipe_script.sh, which launches the script every Saturday at 10AM.
+
+Feel free to modify this script and adapt it to suit your requirements.
