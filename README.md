@@ -18,4 +18,8 @@ To running this script, make sure you have rustserver.service for starting Rust 
 And you need to have Telegram bot if u want to send notifications like this.
 ![image](https://github.com/user-attachments/assets/7f51221a-6c77-4f6c-9d52-2a06463e640a)
 
+If u want to start it manualy just add this to crontab:
+
+0 10 * * 6 /usr/bin/sudo /home/rustserver/server/wipe_script.sh (every 6 day of week in 10AM wipe server)
+
 You can change this script, and use it for any purpose. 
