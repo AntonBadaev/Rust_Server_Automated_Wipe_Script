@@ -27,12 +27,12 @@ LOGFILE="/path/to/wipe_script.log"
 api_key=""
 chat_id=""
 
-# Retrieve the current week
-current_week=$(date +%V)
-
 # Define paths to the files storing the last wipe dates
 last_map_only_wipe_file="/path/to/last_map_only_wipe.txt"
 last_map_and_players_wipe_file="/path/to/last_map_and_players_wipe.txt"
+
+# Retrieve the current week
+current_week=$(date +%V)
 
 # Read the last wipe dates from file
 last_map_only_wipe=$(cat $last_map_only_wipe_file 2>/dev/null || echo "0")
@@ -52,10 +52,10 @@ commands=("sudo systemctl stop rustserver.service"
 
 # Cycle to alternate full wipes every two weeks
 for command in "${commands[@]}"; do
-  if [[ $command =~ ^sudo\ rm\ /home/rustserver/server/my_server_identity/proceduralmap* ]]; then
+  if [[ $command =~ ^sudo\ rm\ /path/to/server/my_server_identity/proceduralmap* ]]; then
     if [[ $((current_week - last_map_and_players_wipe)) -gt $((current_week - last_map_only_wipe)) ]]; then
       echo "Removing both map and player files..." >> $LOGFILE
-      command="sudo rm /home/rustserver/server/my_server_identity/proceduralmap*; sudo rm /home/rustserver/server/my_server_identity/player*"
+      command="sudo rm /path/to/server/my_server_identity/proceduralmap*; sudo rm /path/to/server/my_server_identity/player*"
       echo $current_week > $last_map_and_players_wipe_file
     else
       echo "Removing only map files..." >> $LOGFILE
