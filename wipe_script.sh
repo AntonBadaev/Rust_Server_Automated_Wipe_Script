@@ -13,7 +13,7 @@
 # 4. Unzip Oxide to the server directory RustDedicated_Data/Managed/*. !!!The archive needs to be in the same directory as your Rust server, i.e., ~/server directory!!!
 # 5. Add permissions to RustDedicated_Data/Managed/* for the server admin user
 # 6. Every first week, remove map files
-# 7. Every second week, remove map and player files (blueprints)
+# 7. !to do! Every second week, remove map and player files (blueprints)
 # 8. Remove Oxide files after downloading.
 # 9. Run the server. If successful, notify via the Telegram bot.
 # 10. Sleep for 600 seconds while server starting
