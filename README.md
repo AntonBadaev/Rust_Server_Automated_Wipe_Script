@@ -25,8 +25,6 @@ Example of message:
 
 If u want to start it automaticly just add this to crontab:
 
-example: 0 10 * * 6 /usr/bin/sudo /home/rustserver/server/wipe_script.sh 
-
-Launch script every 6 day of week at 10AM 
+example: 0 10 * * 6 /usr/bin/sudo /home/rustserver/server/wipe_script.sh this launch script every 6 day of week at 10AM 
 
 You can change this script, and use it for any purpose. 
