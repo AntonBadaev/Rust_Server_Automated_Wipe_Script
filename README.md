@@ -2,17 +2,17 @@ This script has been tested exclusively on Ubuntu 22.04 and is designed for modd
 
 Here's how the script operates on Linux systems:
 
-1. It stops the Rust server service.
-2. It initiates an update for the server.
-3. It downloads a new version of Oxide.
-4. It extracts Oxide into the server's RustDedicated_Data/Managed directory. Note, the archive should be located in the same directory as your Rust server, typically at ~/server.
-5. It adds necessary permissions for the server admin user on RustDedicated_Data/Managed/*.
-6. It removes map files during the first week.
-7. It removes both map and player files (blueprints) during the second week.
-8. It deletes Oxide files after they've been downloaded.
-9. It starts the server, sending a notification through the Telegram bot upon successful launch.
-10. It pauses for 600 seconds to allow for server startup.
-11. It sends the status of the Rust server service via the Telegram bot.
+1. stops the Rust server service.
+2. initiates an update for the server.
+3. downloads a new version of Oxide.
+4. extracts Oxide into the server's RustDedicated_Data/Managed directory. Note, the archive should be located in the same directory as your Rust server, typically at ~/server.
+5. adds necessary permissions for the server admin user on RustDedicated_Data/Managed/*.
+6. removes map files during the first week.
+7. removes both map and player files (blueprints) during the second week.
+8. deletes Oxide files after they've been downloaded.
+9. tarts the server, sending a notification through the Telegram bot upon successful launch.
+10. pauses for 600 seconds to allow for server startup.
+11. sends the status of the Rust server service via the Telegram bot.
 
 Important! Prior to running this script, ensure you have set up a personal Telegram bot and configured your Rust server with a service for management.
 
