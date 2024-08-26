@@ -46,7 +46,7 @@ commands=("sudo systemctl stop rustserver.service"
           "sudo 7z x -y $server_path/develop"
           "sudo chown -R user:user $server_path/RustDedicated_Data/Managed/*"
           "sudo rm $server_path/develop"
-          "sudo rm $server_path/SERVER_IDENTITY/proceduralmap*"
+          "sudo rm $server_path/my_server_identity/proceduralmap*"
           "sudo systemctl start rustserver.service"
           "curl -s -X POST https://api.telegram.org/bot$api_key/sendMessage -d chat_id=$chat_id -d text='Wipe successful!'"
 )
