@@ -19,6 +19,8 @@
 # 10. Pauses for 600 seconds to allow for server startup
 # 11. Sends the status of the Rust server service via the Telegram bot.
 
+# path like $server_path/my_server_identity/proceduralmap need to be changed to your server identity. 
+
 # Log path
 LOGFILE="/path/to/wipe_script.log"
 > $LOGFILE
