@@ -10,7 +10,7 @@ This script has been tested only on Ubuntu 22.04 selfhosted server, and is desig
 6. removes map files during the first week.
 7. removes both map and player files (blueprints) during the second week.
 8. deletes Oxide files after they've been downloaded.
-9. tarts the server, sending a notification through the Telegram bot upon successful launch.
+9. starts the server, sending a notification through the Telegram bot upon successful launch.
 10. pauses for 600 seconds to allow for server startup.
 11. sends the status of the Rust server service via the Telegram bot.
 
